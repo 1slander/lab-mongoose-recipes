@@ -39,18 +39,28 @@ mongoose
     });
   })
   .then((recipe) => {
-    console.log(recipe.title);
+    console.log(`This Recipe: ${recipe.title}`);
     return Recipe.insertMany(data);
   })
   .then((recipes) => {
     recipes.forEach((recipe) => {
-      console.log(recipe.title);
+      console.log("-", recipe.title);
     });
     return Recipe.findOneAndUpdate(
       { title: "Rigatoni alla Genovese" },
       { duration: 100 }
     );
   })
+  .then(() => {
+    return Recipe.deleteOne({ title: "Carrot Cake" });
+  })
+  .then(() => {
+    console.log(`Recipe Deleted`);
+  })
   .catch((error) => {
     console.error("Error connecting to the database", error);
+  })
+  .finally(() => {
+    console.log(`Bon Appetit - Disconnected`);
+    mongoose.disconnect();
   });
